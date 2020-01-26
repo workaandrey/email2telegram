@@ -12,9 +12,5 @@
 */
 
 Route::get('/', function () {
-    return cache()->remember('test', 600, function() {
-        echo "cache";
-        return 'Hello world';
-    });
     return view('welcome');
 });
