@@ -50,7 +50,7 @@ class FetchingEmailDataController extends Controller
                   echo $oFolder->name;
                   if ($oFolder->name == 'INBOX') {
                       echo $nameFolders = $oFolder->name;
-                      $aMessageUnseen5Days = $oFolder->query()->since(now()->subDays(1-0))->get();
+                      $aMessageUnseen5Days = $oFolder->query()->since(now()->subDays(10))->get();
                       echo $countaMessageUnseen5Days = $oFolder->search()->unseen()->leaveUnread()->setFetchBody(false)->setFetchAttachment(false)->since(now()->subDays(100))->get()->count();
                       foreach ($aMessageUnseen5Days as $oMessage) {
                           echo $oMessage->getUid() . '<br />';
