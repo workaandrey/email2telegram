@@ -12,6 +12,9 @@ RUN apt-get update && apt-get install -y \
     mariadb-client \
     libzip-dev \
     libpng-dev \
+     libmcrypt-dev\
+     libc-client-dev\
+     libkrb5-dev\
     libjpeg62-turbo-dev \
     libfreetype6-dev \
     locales \
@@ -22,19 +25,21 @@ RUN apt-get update && apt-get install -y \
     git \
     curl
 
+
 #Install redis extension
-RUN pecl install -o -f redis \
+RUN pecl install -o -f redis mcrypt-1.0.1 \
     &&  rm -rf /tmp/pear \
-    &&  docker-php-ext-enable redis
+    &&  docker-php-ext-enable redis mcrypt
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install extensions
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
+RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl fileinfo
 RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
 RUN docker-php-ext-install gd
-
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
+    docker-php-ext-install imap
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 

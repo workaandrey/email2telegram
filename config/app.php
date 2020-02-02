@@ -165,7 +165,8 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Telegram\Bot\Laravel\TelegramServiceProvider::class,
+        Webklex\IMAP\Providers\LaravelServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -189,7 +190,8 @@ return [
     */
 
     'aliases' => [
-
+        'Telegram' => Telegram\Bot\Laravel\Facades\Telegram::class,
+        'Client' => Webklex\IMAP\Facades\Client::class,
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
