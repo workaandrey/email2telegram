@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Mailbox extends Model
 {
-    protected $fillable = ['user_id', 'name', 'host', 'port', 'encryption', 'email', 'password', 'is_active'];
+    protected $fillable = ['user_id', 'name', 'host', 'port', 'encryption', 'email', 'password', 'is_active', 'telegram_chat_id'];
 
     public function user()
     {
