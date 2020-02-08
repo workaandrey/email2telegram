@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Mailbox;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -13,7 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+         Mailbox::class => \App\Policies\Mailbox::class,
     ];
 
     /**
