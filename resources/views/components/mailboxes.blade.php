@@ -1,3 +1,4 @@
+<p><a href="{{route('mailbox.create')}}" class="btn btn-success">Create mailbox</a></p>
 <table class="table table-hover table-bordered ">
     <thead class="thead-dark">
     <tr>

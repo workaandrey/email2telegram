@@ -21,6 +21,6 @@ class Mailbox extends Model
 
     public function setPasswordAttribute($value)
     {
-        return encrypt($value);
+        $this->attributes['password'] = encrypt($value);
     }
 }
