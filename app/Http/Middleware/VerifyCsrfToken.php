@@ -2,7 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use Illuminate\Contracts\Encryption\Encrypter;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class VerifyCsrfToken extends Middleware
 {
@@ -19,6 +22,13 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        '/<token>/webhook'
+        //
     ];
+
+    public function __construct( \Illuminate\Contracts\Foundation\Application $app, \Illuminate\Contracts\Encryption\Encrypter $encrypter)
+    {
+        $this->app = $app;
+        $this->encrypter = $encrypter;
+        $this->except[]=Telegram::getAccessToken();
+    }
 }

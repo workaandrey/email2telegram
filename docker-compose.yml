@@ -66,16 +66,6 @@ services:
       - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
     networks:
       - app-network
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8085:8080
-    networks:
-      - app-network
-
-
-
 
 #Docker Networks
 networks:
