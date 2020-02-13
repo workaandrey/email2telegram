@@ -23,6 +23,7 @@ class CreateMailboxesTable extends Migration
             $table->string('email');
             $table->string('password');
             $table->tinyInteger('is_active')->default(1);
+            $table->string('telegram_chat_id')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')

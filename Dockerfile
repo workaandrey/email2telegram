@@ -8,6 +8,7 @@ WORKDIR /var/www
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
+    cron \
     build-essential \
     mariadb-client \
     libpq-dev \
@@ -35,6 +36,18 @@ RUN pecl install -o -f redis mcrypt-1.0.1 \
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Copy hello-cron file to the cron.d directory
+COPY cron /etc/cron.d/cron
+
+# Give execution rights on the cron job
+RUN chmod 0644 /etc/cron.d/cron
+
+# Apply cron job
+RUN crontab /etc/cron.d/cron
+
+# Create the log file to be able to run tail
+RUN touch /var/log/cron.log
+
 # Install extensions
 
 RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
@@ -54,6 +67,8 @@ RUN useradd -u 1000 -ms /bin/bash -g www www
 # Copy existing application directory contents
 COPY . /var/www
 
+RUN cd /var/www && composer install
+
 # Copy existing application directory permissions
 COPY --chown=www:www . /var/www
 
@@ -63,3 +78,6 @@ USER www
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 CMD ["php-fpm"]
+
+# Run the command on container startup
+CMD cron && tail -f /var/log/cron.log

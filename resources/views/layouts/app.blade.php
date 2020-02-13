@@ -33,16 +33,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        @if(Auth::user())  <!-- Нужно если в таблице нет пользователей-->
-                        @if(Auth::user()->is_admin)
+                        @if(Auth::user() && Auth::user()->is_admin)
                         <li><a href="{{route('admin.index')}}">Панель состояния</a></li>
                                 <li><a href="{{route('admin.setting.index')}}">Настройки</a></li>
                             <li> пользователь администратор</li>
                         @else
                             обычный пользователь
                         @endif
-                        @endif
-
                     </ul>
 
                     <!-- Right Side Of Navbar -->
