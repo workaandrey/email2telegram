@@ -50,6 +50,12 @@ class TelegramController extends Controller
                         'parse_mode' => 'HTML',
                         'text' => $email->id
                     ]);
+                }else{
+                    Telegram::sendMessage([
+                        'chat_id' => $telegram['from']['id'],
+                        'parse_mode' => 'HTML',
+                        'text' => 'no email in the database'
+                    ]);
                 }
             }
         }
@@ -157,7 +163,7 @@ class TelegramController extends Controller
         Telegram::sendMessage([
             'chat_id' => $chatId,
             'parse_mode' => 'HTML',
-            'text' => $e->getMessage().'lkll'
+            'text' => $e->getMessage()
         ]);
     }
 }

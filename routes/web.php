@@ -29,7 +29,7 @@ app('App\Http\Controllers\Backend\TelegramController')->webhook();
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/getting-emails', 'FetchingEmailDataController@gettingEmails');
+
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('mailbox', 'MailboxController');
 });
