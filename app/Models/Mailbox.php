@@ -13,14 +13,4 @@ class Mailbox extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function getPasswordAttribute($value)
-    {
-        return empty($value) ? $value : decrypt($value);
-    }
-
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = encrypt($value);
-    }
 }

@@ -37119,8 +37119,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/andrey/code/email2telegram/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/andrey/code/email2telegram/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\GTA\Desktop\otus\feature\email2telegram-features-crud\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\GTA\Desktop\otus\feature\email2telegram-features-crud\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -21,14 +21,14 @@
         <td class="align-middle">{{$mailbox->port}}</td>
         <td class="align-middle">{{$mailbox->encryption}}</td>
         <td class="align-middle text-center">
-            <a href="{{route('mailbox.edit', $mailbox)}}" class="btn btn-secondary">Edit</a>
-            |
-            <a href="javascript:;" class="btn btn-danger"
-               onclick="if(confirm('Do you really want to delete this item?')) $(this).next().submit();">Delete</a>
-            <form action="{{route('mailbox.destroy', $mailbox)}}" method="post">
-                {{method_field('DELETE')}}
-                {{csrf_field()}}
-            </form>
+        <a href="{{route('mailbox.edit', $mailbox)}}" class="btn btn-secondary">Edit</a>
+        |
+        <a href="javascript:;" class="btn btn-danger"
+           onclick="if(confirm('Do you really want to delete this item?')) $(this).next().submit();">Delete</a>
+        <form action="{{route('mailbox.destroy', $mailbox)}}" method="post">
+            {{method_field('DELETE')}}
+            {{csrf_field()}}
+        </form>
         </td>
     </tr>
     @endforeach

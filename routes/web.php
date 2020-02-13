@@ -16,9 +16,19 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::middleware(['admin'])->prefix('admin')->namespace('Backend')->name('admin.')->group(function () {
+    Route::get('/', 'DashboardController@index')->name('index');
+    Route::get('/setting', 'SettingController@index')->name('setting.index');
+    Route::post('/setting/store', 'SettingController@store')->name('setting.store');
+    Route::post('setting/webhook', 'SettingController@setwebhook')->name('setting.setwebhook');
+    Route::post('setting/getwebhookinfo', 'SettingController@getwebhookinfo')->name('setting.getwebhookinfo');
+
+});
+
+Route::post(Telegram::getAccessToken(), 'Backend\TelegramController@webhook');
 
 Route::get('/home', 'HomeController@index')->name('home');
-
+Route::get('/getting-emails', 'FetchingEmailDataController@gettingEmails');
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('mailbox', 'MailboxController');
 });
