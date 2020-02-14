@@ -28,7 +28,7 @@ Route::middleware(['admin'])->prefix('admin')->namespace('Backend')->name('admin
 Route::post(Telegram::getAccessToken(), 'Backend\TelegramController@webhook');
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/getting-emails', 'FetchingEmailDataController@gettingEmails');
+
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('mailbox', 'MailboxController');
 });

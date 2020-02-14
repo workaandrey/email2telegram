@@ -22,40 +22,55 @@ class TelegramController extends Controller
     /**
      *
      */
+    public $telegram;
+
+    /**
+     *
+     */
     public function webhook(){
-        $telegram=Telegram::getWebhookUpdates()['message'];
-        if(!TelegramUser::find($telegram['from']['id'])){
-            TelegramUser::create(json_decode($telegram['from'],true));
+        $this->telegram=Telegram::getWebhookUpdates()['message'];
+        if(!TelegramUser::find( $this->telegram['from']['id'])){
+            TelegramUser::create(json_decode($this->telegram['from'],true));
         }
         Telegram::commandsHandler(true);
 
-        if (preg_match("/^.+@.+\..+$/", Telegram::getWebhookUpdates()["message"]["text"])) {
-            $domain = substr(strrchr(Telegram::getWebhookUpdates()["message"]["text"], "@"), 1);
+        if (preg_match("/^.+@.+\..+$/", $this->telegram["text"])) {
+            $domain = substr(strrchr($this->telegram["text"], "@"), 1);
             $res = getmxrr($domain, $mx_records, $mx_weight);
             if ( !$res || !count($mx_records) || (count($mx_records)==1 && (!$mx_records[0] || $mx_records[0] == "0.0.0.0"))) {
                 Telegram::sendMessage([
-                    'chat_id' => $telegram['from']['id'],
+                    'chat_id' =>  $this->telegram['from']['id'],
                     'parse_mode' => 'HTML',
                     'text' => 'Wrong email'
                 ]);
             } else {
-                $email=DB::table('mailboxes')->where('email',Telegram::getWebhookUpdates()["message"]["text"])->first();
-                if($email->id){
-                    $client=$this->getClient($email->host, $email->port,$email->encryption,true, $email->email, $email->password,'imap',$telegram['from']['id']);
-                   $connect=$this->getConnect($client,$telegram['from']['id']);
-                    $this->sendFolderInbox($connect,$telegram['from']['id']);
-
-                    Telegram::sendMessage([
-                        'chat_id' => $telegram['from']['id'],
-                        'parse_mode' => 'HTML',
-                        'text' => $email->id
-                    ]);
-                }
+             $this->telegramMail();
             }
         }
 
     }
 
+    /**
+     *
+     */
+    public function telegramMail(){
+    $email=DB::table('mailboxes')->where('email',$this->telegram["text"])->first();
+        if($email->id){
+               $client=$this->getClient($email->host, $email->port,$email->encryption,true, $email->email, $email->password,'imap',$this->telegram['from']['id']);
+               $connect=$this->getConnect($client, $this->telegram['from']['id']);
+               $this->sendFolderInbox($connect, $this->telegram['from']['id']);
+
+
+        }else{
+               Telegram::sendMessage([
+                   'chat_id' =>  $this->telegram['from']['id'],
+                   'parse_mode' => 'HTML',
+                   'text' => 'no email in the database'
+        ]);
+          }
+
+
+}
 
     /**
      * @param $host
@@ -157,7 +172,7 @@ class TelegramController extends Controller
         Telegram::sendMessage([
             'chat_id' => $chatId,
             'parse_mode' => 'HTML',
-            'text' => $e->getMessage().'lkll'
+            'text' => $e->getMessage()
         ]);
     }
 }

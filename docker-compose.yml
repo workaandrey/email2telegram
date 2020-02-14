@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 services:
 
   #PHP Service
@@ -9,24 +9,19 @@ services:
     image: digitalocean.com/php
     container_name: app
     restart: unless-stopped
-    tty: true
-    environment:
-      SERVICE_NAME: app
-      SERVICE_TAGS: dev
     working_dir: /var/www
     volumes:
       - ./:/var/www
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
-    networks:
-      - app-network
+    depends_on:
+      - db
+      - redis
+
 
   #Nginx Service
   webserver:
     image: nginx:alpine
     container_name: webserver
-    depends_on:
-      - db
-      - redis
     restart: unless-stopped
     tty: true
     ports:
@@ -35,8 +30,8 @@ services:
     volumes:
       - ./:/var/www
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
-    networks:
-      - app-network
+    depends_on:
+      - app
 
   #Redis
   redis:
@@ -45,33 +40,32 @@ services:
     container_name: redis
     ports:
       - 6379:6379
-    networks:
-      - app-network
 
   #MySQL Service
   db:
-    image: mysql:5.7.22
-    container_name: database
-    restart: unless-stopped
-    tty: true
+    image: postgres
     ports:
-      - "3309:3306"
-    environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_ROOT_PASSWORD: your_mysql_root_password
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
+      - "6543:5432"
     volumes:
-      - dbdata:/var/lib/mysql/
-      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
-    networks:
-      - app-network
+      - postgres-data-12:/var/lib/postgresql/data
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+  adminer:
+    image: adminer
+    ports:
+      - "8089:8080"
+    restart: unless-stopped
+    depends_on:
+      - db
 
 #Docker Networks
-networks:
-  app-network:
-    driver: bridge
+
 #Volumes
 volumes:
-  dbdata:
-    driver: local
+  postgres-data-12:
+
+
+
