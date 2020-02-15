@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'telegram_token', 'telegram_chat_id',
     ];
 
     /**
@@ -41,5 +41,16 @@ class User extends Authenticatable
     public function mailboxes()
     {
         return $this->hasMany(Mailbox::class);
+    }
+
+    public function useTelegramBot(): void
+    {
+        if(empty($this->telegram_token) || empty($this->telegram_chat_id)) {
+            throw new \Exception('Specify valid telegram token');
+        }
+        config([
+            'telegram.bots.common.token' => $this->telegram_token,
+            'telegram.bots.common.channel' => $this->telegram_chat_id
+        ]);
     }
 }

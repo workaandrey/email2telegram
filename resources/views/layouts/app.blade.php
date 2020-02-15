@@ -53,9 +53,10 @@
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{route('home')}}">Почтовые ящики</a>
+                                    <a class="dropdown-item" href="{{route('settings.index')}}">Настройки</a>
                                     @if(Auth::user() && Auth::user()->is_admin)
                                         <a class="dropdown-item" href="{{route('admin.index')}}">Панель состояния</a>
-                                        <a class="dropdown-item" href="{{route('admin.setting.index')}}">Настройки</a>
+                                        <a class="dropdown-item" href="{{route('admin.setting.index')}}">Вебхук</a>
                                     @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

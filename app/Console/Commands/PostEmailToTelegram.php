@@ -21,7 +21,7 @@ class PostEmailToTelegram extends Command
      *
      * @var string
      */
-    protected $signature = 'postEmailToTelegram:5';
+    protected $signature = 'postEmailToTelegram';
 
     /**
      * The console command description.

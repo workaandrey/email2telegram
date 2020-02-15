@@ -11,8 +11,6 @@
 |
 */
 
-use Telegram\Bot\Laravel\Facades\Telegram;
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -33,4 +31,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('mailbox', 'MailboxController');
+    Route::get('settings', 'SettingsController@index')->name('settings.index');
+    Route::post('settings', 'SettingsController@save')->name('settings.save');
+
+    Route::get('/bot/getupdates', function() {
+        $updates = Telegram::getUpdates();
+        return (json_encode($updates));
+    });
 });
