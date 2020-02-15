@@ -16,7 +16,15 @@ services:
     depends_on:
       - db
       - redis
-
+  scheduler:
+    image: digitalocean.com/php
+    container_name: scheduler
+    depends_on:
+      - app
+    volumes:
+      - .:/var/www/
+    environment:
+      CONTAINER_ROLE: scheduler
 
   #Nginx Service
   webserver:
@@ -39,7 +47,7 @@ services:
     restart: always
     container_name: redis
     ports:
-      - 6379:6379
+      - 6385:6379
 
   #MySQL Service
   db:

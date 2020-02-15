@@ -1,4 +1,4 @@
-@extends('backend.layouts.app');
+@extends('layouts.app')
 
 @section('content')
 <div class="container">
@@ -7,7 +7,7 @@
             <span>{{Session::get('status')}}</span>
         </div>
         @endif
-    {{$url_callback_bot}}
+    {{$url_callback_bot ?? ''}}
 
 <form action="{{route('admin.setting.store')}}" method="post">
 {{csrf_field()}}
@@ -20,13 +20,13 @@
 
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a id="postUrl" href="#" onclick="document.getElementById('url_callback_bot').value='{{$url_callback_bot }}'">Вставить url</a></li>
+                    <li><a id="postUrl" href="#" onclick="document.getElementById('url_callback_bot').value='{{$url_callback_bot ?? '' }}'">Вставить url</a></li>
                     <li><a href="#" onclick="event.preventDefault(); document.getElementById('setwebhook').submit();">Отправить url</a></li>
                     <li><a href="#" onclick="event.preventDefault(); document.getElementById('getwebhookinfo').submit();">Получить информацию</a></li>
                 </ul>
 
             </div>
-            <label for="url_callback_bot"></label><input type="url" class="form-control" id="url_callback_bot" name="url_callback_bot" value="{{$url_callback_bot }}">
+            <label for="url_callback_bot"></label><input type="url" class="form-control" id="url_callback_bot" name="url_callback_bot" value="{{$url_callback_bot ?? '' }}">
 
     </div>
 
@@ -35,12 +35,12 @@
 </form>
     <form id="setwebhook" action="{{route('admin.setting.setwebhook')}}" method="POST" style="display:none;">
         {{csrf_field()}}
-        <input type="hidden" name="url" value="{{$url_callback_bot }}">
+        <input type="hidden" name="url" value="{{$url_callback_bot ?? '' }}">
 
     </form>
     <form id="getwebhookinfo" action="{{route('admin.setting.getwebhookinfo')}}" method="POST" style="display:none;" >
         {{csrf_field()}}
-        <input type="hidden" name="url" value="{{$url_callback_bot}}">
+        <input type="hidden" name="url" value="{{$url_callback_bot ?? ''}}">
     </form>
 
 </div>

@@ -32,15 +32,6 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-                        @if(Auth::user() && Auth::user()->is_admin)
-                        <li><a href="{{route('admin.index')}}">Панель состояния</a></li>
-                                <li><a href="{{route('admin.setting.index')}}">Настройки</a></li>
-                            <li> пользователь администратор</li>
-                        @else
-                            обычный пользователь
-                        @endif
-                    </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -61,6 +52,10 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    @if(Auth::user() && Auth::user()->is_admin)
+                                        <a class="dropdown-item" href="{{route('admin.index')}}">Панель состояния</a>
+                                        <a class="dropdown-item" href="{{route('admin.setting.index')}}">Настройки</a>
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
