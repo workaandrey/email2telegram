@@ -66,7 +66,7 @@ class ReadMailbox implements ShouldQueue
             $oClient = new Client([
                 'host' => $host,
                 'port' => $port,
-                'encryption' => $encryption,
+                'encryption' => trim($encryption == 'none' ? false : $encryption),
                 'validate_cert' => $validate_cert,
                 'username' => $username,
                 'password' => $password,
