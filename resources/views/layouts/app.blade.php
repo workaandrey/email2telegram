@@ -52,6 +52,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{route('home')}}">Почтовые ящики</a>
                                     @if(Auth::user() && Auth::user()->is_admin)
                                         <a class="dropdown-item" href="{{route('admin.index')}}">Панель состояния</a>
                                         <a class="dropdown-item" href="{{route('admin.setting.index')}}">Настройки</a>
