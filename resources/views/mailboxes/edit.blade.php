@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Edit mailbox')
+@section('title', 'Редактировать конфигурацию для почтового ящика')
 
 @section('content')
     <div class="container">
@@ -9,15 +9,15 @@
                     {{method_field('PUT')}}
                     {{csrf_field()}}
                     <div class="card">
-                        <div class="card-header">Edit Mailbox</div>
+                        <div class="card-header">Редактировать конфигурацию для почтового ящика</div>
 
                         <div class="card-body">
                             @include('mailboxes._form')
                         </div>
 
                         <div class="card-footer">
-                            <a class="float-left btn" href="{{route('home')}}">Cancel</a>
-                            <button type="submit" class="btn btn-success float-right">Save</button>
+                            <a class="float-left btn" href="{{route('home')}}">Отмена</a>
+                            <button type="submit" class="btn btn-success float-right">Сохранить</button>
                         </div>
                     </div>
                 </form>

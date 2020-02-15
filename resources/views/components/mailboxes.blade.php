@@ -1,13 +1,13 @@
-<p><a href="{{route('mailbox.create')}}" class="btn btn-success">Create mailbox</a></p>
+<p><a href="{{route('mailbox.create')}}" class="btn btn-success">Создать новую запись</a></p>
 <table class="table table-hover table-bordered ">
     <thead class="thead-dark">
     <tr>
         <th scope="col">#</th>
-        <th scope="col">Name</th>
+        <th scope="col">Название</th>
         <th scope="col">Email</th>
-        <th scope="col">Host</th>
-        <th scope="col">Port</th>
-        <th scope="col">Encryption</th>
+        <th scope="col">Сервер</th>
+        <th scope="col">Порт</th>
+        <th scope="col">Шифрование</th>
         <th scope="col"></th>
     </tr>
     </thead>
@@ -21,10 +21,10 @@
         <td class="align-middle">{{$mailbox->port}}</td>
         <td class="align-middle">{{$mailbox->encryption}}</td>
         <td class="align-middle text-center">
-        <a href="{{route('mailbox.edit', $mailbox)}}" class="btn btn-secondary">Edit</a>
+        <a href="{{route('mailbox.edit', $mailbox)}}" class="btn btn-secondary">Редактировать</a>
         |
         <a href="javascript:;" class="btn btn-danger"
-           onclick="if(confirm('Do you really want to delete this item?')) $(this).next().submit();">Delete</a>
+           onclick="if(confirm('Вы жействительно хотите удалить эту запись?')) $(this).next().submit();">Удалить</a>
         <form action="{{route('mailbox.destroy', $mailbox)}}" method="post">
             {{method_field('DELETE')}}
             {{csrf_field()}}

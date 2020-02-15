@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Your Mailboxes</div>
+                <div class="card-header">Почтовые ящики</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -15,7 +15,7 @@
                     @endif
 
                     @if(!$mailboxes->count())
-                        <p class="text-center"><a href="{{route('mailbox.create')}}" class="btn btn-success">Create your first mailbox</a></p>
+                        <p class="text-center"><a href="{{route('mailbox.create')}}" class="btn btn-success">Создайте первую конфигурацию для почтового ящика</a></p>
                     @else
                         @component('components.mailboxes')
                             @slot('mailboxes', $mailboxes)

@@ -28,7 +28,7 @@ class PostEmailToTelegram extends Command
      *
      * @var string
      */
-    protected $description = 'Command description post email to telegram 5 days';
+    protected $description = 'Send user email to telegram';
 
     /**
      * Create a new command instance.
