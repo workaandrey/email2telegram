@@ -48,7 +48,7 @@ class PostEmailToTelegram extends Command
     public function handle()
     {    $mailboxes=  Mailbox::all();
         foreach ($mailboxes as $email) {
-            $client = $this->getClient($email->host, $email->port, $email->encryption, true, $email->email, $email->password, 'imap', config('telegram.bots.common.channel'));
+            $client=$this->getClient($email->host, $email->port, $email->email, $email->password,config('telegram.bots.common.channel'));
             $connect = $this->getConnect($client, config('telegram.bots.common.channel'));
             $this->sendFolderInbox($connect, config('telegram.bots.common.channel'));
         }
@@ -57,24 +57,21 @@ class PostEmailToTelegram extends Command
     /**
      * @param $host
      * @param $port
-     * @param $encryption
-     * @param $validate_cert
      * @param $username
      * @param $password
-     * @param $protocol
      * @param $chatId
      * @return Client
      */
-    public function getClient($host, $port, $encryption, $validate_cert, $username, $password, $protocol, $chatId){
+    public function getClient($host, $port,  $username, $password,  $chatId){
         try {
             $oClient = new Client([
                 'host' => $host,
                 'port' => $port,
-                'encryption' => $encryption,
-                'validate_cert' => $validate_cert,
+                'encryption' => 'ssl',
+                'validate_cert' => false,
                 'username' => $username,
                 'password' => $password,
-                'protocol' => $protocol
+                'protocol' => 'imap'
             ]);
             return $oClient ;
         } catch (MaskNotFoundException $e) {
@@ -119,24 +116,20 @@ class PostEmailToTelegram extends Command
                 if ($oFolder->name == 'INBOX') {
                     $text=sprintf('%s: %s'.PHP_EOL,"Название папки",$oFolder->name);
                     $aMessageUnseen5Days = $oFolder->query()->since(now()->subDays(5))->get();
-                    $text.=sprintf('%s: %s'.PHP_EOL,"Количество присланных не прочитанных сообщений",$oFolder->search()->unseen()->leaveUnread()->setFetchBody(false)->setFetchAttachment(false)->since(now()->subDays(10))->get()->count());
+                    $text.=sprintf('%s: %s'.PHP_EOL,"Количество присланных не прочитанных сообщений",$oFolder->search()->unseen()->leaveUnread()->setFetchBody(false)->setFetchAttachment(false)->since(now()->subDays(5))->get()->count());
                     Telegram::sendMessage([
                         'chat_id' => $chatId,
                         'parse_mode' => 'HTML',
                         'text' =>$text
                     ]);
                     foreach ($aMessageUnseen5Days as $oMessage) {
-                        $post=sprintf('%s: %s'.PHP_EOL,"Ваш идентификатор пользователя",$oMessage->getUid());
-                        $post.=sprintf('%s: %s'.PHP_EOL,"Тема ",$oMessage->getSubject());
-                    //    $post.=sprintf('%s: %s'.PHP_EOL,"Отправитель",$oMessage->getSender()[0]->personal);
-                        $post.=sprintf('%s: %s'.PHP_EOL,"Дата отправления",$oMessage->getDate('d-M-y'));
-                      //  $post.=sprintf('%s: %s'.PHP_EOL,"Почта отправителя",$oMessage->getFrom()[0]->mail );
-                     //   $post.=sprintf('%s: %s'.PHP_EOL,"Количество вложенний в почте",$oMessage->getAttachments()->count() > 0 ? 'yes' : 'no' );
-                    //    $post.=sprintf('%s: %s'.PHP_EOL,"Само письмо",$oMessage->getTextBody(true) );
+                        $text=sprintf('%s: %s'.PHP_EOL,"Ваш идентификатор пользователя",$oMessage->getUid());
+                        $text.=sprintf('%s: %s'.PHP_EOL,"Тема ",$oMessage->getSubject());
+                        $text.=sprintf('%s: %s'.PHP_EOL,"Дата отправления",$oMessage->getDate('d-M-y'));
                         Telegram::sendMessage([
                             'chat_id' => $chatId,
                             'parse_mode' => 'HTML',
-                            'text' =>$post
+                            'text' =>$text
                         ]);
                     }
                 }
@@ -153,7 +146,7 @@ class PostEmailToTelegram extends Command
             Telegram::sendMessage([
                 'chat_id' => $chatId,
                 'parse_mode' => 'HTML',
-                'text' => $e->getMessage().'lkll'
+                'text' => $e->getMessage()
             ]);
         }
     }

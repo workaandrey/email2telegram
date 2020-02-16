@@ -26,7 +26,6 @@ Route::middleware(['admin'])->prefix('admin')->namespace('Backend')->name('admin
 });
 
 Route::post(Telegram::getAccessToken(), 'Backend\TelegramController@webhook');
-
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {

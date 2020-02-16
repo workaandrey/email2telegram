@@ -1,7 +1,7 @@
 FROM php:7.3-fpm
 
 # Copy composer.lock and composer.json
-COPY composer.lock composer.json /var/www/
+COPY  composer.json /var/www/
 
 # Set working directory
 WORKDIR /var/www
@@ -67,7 +67,7 @@ RUN useradd -u 1000 -ms /bin/bash -g www www
 # Copy existing application directory contents
 COPY . /var/www
 
-RUN cd /var/www && composer install
+#RUN cd /var/www && composer install
 
 # Copy existing application directory permissions
 COPY --chown=www:www . /var/www
@@ -80,4 +80,4 @@ EXPOSE 9000
 CMD ["php-fpm"]
 
 # Run the command on container startup
-CMD cron && tail -f /var/log/cron.log
+#CMD cron && tail -f /var/log/cron.log

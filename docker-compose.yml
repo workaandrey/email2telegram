@@ -33,15 +33,8 @@ services:
     depends_on:
       - app
 
-  #Redis
-  redis:
-    image: redis:5-alpine
-    restart: always
-    container_name: redis
-    ports:
-      - 6379:6379
 
-  #MySQL Service
+  #Postgres Service
   db:
     image: postgres
     ports:

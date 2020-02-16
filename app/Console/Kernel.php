@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
          $schedule->command('postEmailToTelegram:5 day')
-             ->everyFiveMinutes();
+             ->weeklyOn(1, '8:00');
     }
 
     /**
