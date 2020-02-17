@@ -10,21 +10,14 @@ services:
     container_name: app
     restart: unless-stopped
     working_dir: /var/www
+    environment:
+      CONTAINER_ROLE: app
     volumes:
       - ./:/var/www
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     depends_on:
       - db
       - redis
-  scheduler:
-    image: digitalocean.com/php
-    container_name: scheduler
-    depends_on:
-      - app
-    volumes:
-      - .:/var/www/
-    environment:
-      CONTAINER_ROLE: scheduler
 
   #Nginx Service
   webserver:

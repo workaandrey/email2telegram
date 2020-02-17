@@ -1,14 +1,10 @@
 FROM php:7.3-fpm
 
-COPY docker/start.sh /var/www/docker/start.sh
-
 # Copy composer.lock and composer.json
 COPY composer.lock composer.json /var/www/
 
 # Set working directory
 WORKDIR /var/www
-
-RUN chmod u+x /var/www/docker/start.sh
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
