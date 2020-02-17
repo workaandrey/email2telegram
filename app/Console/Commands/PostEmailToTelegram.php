@@ -5,11 +5,6 @@ namespace App\Console\Commands;
 use App\Jobs\ReadMailbox;
 use App\Models\Mailbox;
 use Illuminate\Console\Command;
-use Telegram\Bot\Laravel\Facades\Telegram;
-use Webklex\IMAP\Client;
-use Webklex\IMAP\Exceptions\ConnectionFailedException;
-use Webklex\IMAP\Exceptions\MailboxFetchingException;
-use Webklex\IMAP\Exceptions\MaskNotFoundException;
 
 /**
  * Class PostEmailToTelegram
@@ -50,7 +45,9 @@ class PostEmailToTelegram extends Command
     {
         $mailboxes = Mailbox::with('user')->isActive()->get();
         foreach ($mailboxes as $mailbox) {
-            ReadMailbox::dispatch($mailbox)->onQueue('read.mailbox');
+            if($mailbox->user->hasValidTelegramConfig()) {
+                ReadMailbox::dispatch($mailbox)->onQueue('read.mailbox');
+            }
         }
     }
 }

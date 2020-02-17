@@ -39,3 +39,5 @@ Route::group(['middleware' => 'auth'], function () {
         return (json_encode($updates));
     });
 });
+
+Route::view('faq', 'faq')->name('faq');

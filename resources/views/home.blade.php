@@ -15,7 +15,11 @@
                     @endif
 
                     @if(!$mailboxes->count())
-                        <p class="text-center"><a href="{{route('mailbox.create')}}" class="btn btn-success">Создайте первую конфигурацию для почтового ящика</a></p>
+                        <p class="text-center">
+                            <a href="{{route('mailbox.create')}}" class="btn btn-success">Создайте первую конфигурацию для почтового ящика</a>
+                            или
+                            <a href="{{route('faq')}}">прочитайте документацию по работе с сервисом</a>
+                        </p>
                     @else
                         @component('components.mailboxes')
                             @slot('mailboxes', $mailboxes)

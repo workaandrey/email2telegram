@@ -53,4 +53,9 @@ class User extends Authenticatable
             'telegram.bots.common.channel' => $this->telegram_chat_id
         ]);
     }
+
+    public function hasValidTelegramConfig():bool
+    {
+        return !empty($this->telegram_token) && !empty($this->telegram_chat_id);
+    }
 }

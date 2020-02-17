@@ -1,4 +1,8 @@
-<p><a href="{{route('mailbox.create')}}" class="btn btn-success">Создать новую запись</a></p>
+<p>
+    <a href="{{route('mailbox.create')}}" class="btn btn-success">Создать новую запись</a>
+    или
+    <a href="{{route('faq')}}">прочитайте документацию по работе с сервисом</a>
+</p>
 <table class="table table-hover table-bordered ">
     <thead class="thead-dark">
     <tr>
