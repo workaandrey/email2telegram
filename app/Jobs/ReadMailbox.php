@@ -13,6 +13,8 @@ use Webklex\IMAP\Client;
 use Webklex\IMAP\Exceptions\ConnectionFailedException;
 use Webklex\IMAP\Exceptions\MailboxFetchingException;
 use Webklex\IMAP\Exceptions\MaskNotFoundException;
+use Webklex\IMAP\Folder;
+use Webklex\IMAP\Message;
 
 class ReadMailbox implements ShouldQueue
 {
@@ -35,7 +37,6 @@ class ReadMailbox implements ShouldQueue
     public function __construct(Mailbox $email)
     {
         $this->email = $email;
-        $this->email->user->useTelegramBot();
     }
 
     /**
@@ -44,6 +45,11 @@ class ReadMailbox implements ShouldQueue
     public function handle(TelegramService $telegramService)
     {
         $this->telegramService = $telegramService;
+        config([
+            'telegram.bots.common.token' => $this->email->user->telegram_token,
+            'telegram.bots.common.channel' => $this->email->user->telegram_chat_id
+        ]);
+
         $client = $this->getClient($this->email->host, $this->email->port, $this->email->encryption, true, $this->email->email, $this->email->password, 'imap', config('telegram.bots.common.channel'));
         $connect = $this->getConnect($client, config('telegram.bots.common.channel'));
         $this->sendFolderInbox($connect, config('telegram.bots.common.channel'));
@@ -112,20 +118,21 @@ class ReadMailbox implements ShouldQueue
     {
         try {
             $aFolder = $oClient->getFolders();
+            /** @var Folder $oFolder */
             foreach ($aFolder as $oFolder) {
 
                 if ($oFolder->name == 'INBOX') {
-                    $text = sprintf('%s: %s' . PHP_EOL, "Название папки", $oFolder->name);
-                    $aMessageUnseen5Days = $oFolder->query()->since(now()->subDays(5))->get();
-                    $text .= sprintf('%s: %s' . PHP_EOL, "Количество присланных не прочитанных сообщений", $oFolder->search()->unseen()->leaveUnread()->setFetchBody(false)->setFetchAttachment(false)->since(now()->subDays(10))->get()->count());
+                    /*$text = sprintf('%s: %s' . PHP_EOL, "Название папки", $oFolder->name);*/
+                    $aMessageUnseen5Days = $oFolder->query()->since(now()->subDays(5))->unseen()->get();
+                    /*$text .= sprintf('%s: %s' . PHP_EOL, "Количество присланных не прочитанных сообщений", $oFolder->search()->unseen()->leaveUnread()->setFetchBody(false)->setFetchAttachment(false)->since(now()->subDays(10))->get()->count());
                     $this->telegramService->bot()->sendMessage([
                         'chat_id' => $chatId,
                         'parse_mode' => 'HTML',
                         'text' => $text
-                    ]);
+                    ]);*/
+                    /** @var Message $oMessage */
                     foreach ($aMessageUnseen5Days as $oMessage) {
-                        $post = sprintf('%s: %s' . PHP_EOL, "Ваш идентификатор пользователя", $oMessage->getUid());
-                        $post .= sprintf('%s: %s' . PHP_EOL, "Тема ", $oMessage->getSubject());
+                        $post = sprintf('%s: %s' . PHP_EOL, "Тема ", $oMessage->getSubject());
                         $post .= sprintf('%s: %s' . PHP_EOL, "Отправитель", $oMessage->getSender()[0]->personal);
                         $post .= sprintf('%s: %s' . PHP_EOL, "Дата отправления", $oMessage->getDate('d-M-y'));
                         $post .= sprintf('%s: %s' . PHP_EOL, "Почта отправителя", $oMessage->getFrom()[0]->mail);
@@ -136,6 +143,9 @@ class ReadMailbox implements ShouldQueue
                             'parse_mode' => 'HTML',
                             'text' => $post
                         ]);
+
+                        $oMessage->setFlag('SEEN');
+                        $oClient->expunge();
                     }
                 }
             }

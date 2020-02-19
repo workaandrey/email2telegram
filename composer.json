@@ -9,14 +9,15 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
+        "ext-json": "*",
         "fideloper/proxy": "^4.0",
         "irazasyed/telegram-bot-sdk": "^3.0",
         "laracasts/flash": "^3.0",
         "laravel/framework": "^6.2",
+        "laravel/horizon": "^3.7",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^1.1",
-        "webklex/laravel-imap": "^1.4",
-        "ext-json": "*"
+        "webklex/laravel-imap": "^1.4"
     },
     "require-dev": {
         "facade/ignition": "^1.4",
