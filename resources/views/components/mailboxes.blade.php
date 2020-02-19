@@ -8,6 +8,7 @@
     <tr>
         <th scope="col">#</th>
         <th scope="col">Название</th>
+        <th scope="col">Активен</th>
         <th scope="col">Email</th>
         <th scope="col">Сервер</th>
         <th scope="col">Порт</th>
@@ -20,6 +21,7 @@
     <tr>
         <th class="align-middle" scope="row">{{$mailbox->id}}</th>
         <td class="align-middle">{{$mailbox->name}}</td>
+        <td class="align-middle">{{$mailbox->is_active ? 'Да': 'Нет'}}</td>
         <td class="align-middle">{{$mailbox->email}}</td>
         <td class="align-middle">{{$mailbox->host}}</td>
         <td class="align-middle">{{$mailbox->port}}</td>
