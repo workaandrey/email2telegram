@@ -1,8 +1,8 @@
 <div class="form-group">
     <label for="active">Активен?</label>
-    <select name="active" id="active" class="form-control">
+    <select name="is_active" id="active" class="form-control">
         <option value="1">Да</option>
-        <option value="0" {{$mailbox->active ? 'selected' : ''}}>Нет</option>
+        <option value="0" {{$mailbox->is_active ? 'selected' : ''}}>Нет</option>
     </select>
 </div>
 <div class="form-group">
