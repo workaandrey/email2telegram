@@ -7,6 +7,7 @@ use App\Services\TelegramService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Webklex\IMAP\Client;
@@ -122,27 +123,32 @@ class ReadMailbox implements ShouldQueue
             foreach ($aFolder as $oFolder) {
 
                 if ($oFolder->name == 'INBOX') {
-                    /*$text = sprintf('%s: %s' . PHP_EOL, "Название папки", $oFolder->name);*/
                     $aMessageUnseen5Days = $oFolder->query()->since(now()->subDays(5))->unseen()->get();
-                    /*$text .= sprintf('%s: %s' . PHP_EOL, "Количество присланных не прочитанных сообщений", $oFolder->search()->unseen()->leaveUnread()->setFetchBody(false)->setFetchAttachment(false)->since(now()->subDays(10))->get()->count());
-                    $this->telegramService->bot()->sendMessage([
-                        'chat_id' => $chatId,
-                        'parse_mode' => 'HTML',
-                        'text' => $text
-                    ]);*/
                     /** @var Message $oMessage */
                     foreach ($aMessageUnseen5Days as $oMessage) {
-                        $post = sprintf('%s: %s' . PHP_EOL, "Тема ", $oMessage->getSubject());
-                        $post .= sprintf('%s: %s' . PHP_EOL, "Отправитель", $oMessage->getSender()[0]->personal);
-                        $post .= sprintf('%s: %s' . PHP_EOL, "Дата отправления", $oMessage->getDate('d-M-y'));
-                        $post .= sprintf('%s: %s' . PHP_EOL, "Почта отправителя", $oMessage->getFrom()[0]->mail);
-                        $post .= sprintf('%s: %s' . PHP_EOL, "Количество вложенний в почте", $oMessage->getAttachments()->count() > 0 ? 'yes' : 'no');
-                        $post .= sprintf('%s: %s' . PHP_EOL, "Само письмо", $oMessage->getTextBody(true));
+                        $emailMessage = <<<TEXT
+<b>От:</b> {$oMessage->getSender()[0]->personal} ({$oMessage->getFrom()[0]->mail})
+<b>Дата:</b> {$oMessage->getDate('d-M-y')}
+<b>Тема: {$oMessage->getSubject()}</b>
+{$oMessage->getTextBody(true)}
+TEXT;
                         $this->telegramService->bot()->sendMessage([
                             'chat_id' => $chatId,
                             'parse_mode' => 'HTML',
-                            'text' => $post
+                            'text' => $emailMessage
                         ]);
+                        /** @var \Webklex\IMAP\Attachment $attachment */
+                        foreach ($oMessage->getAttachments() as $attachment) {
+                            $attachmentDir = sys_get_temp_dir();
+                            $attachment->save($attachmentDir, $attachment->getName());
+                            $attachmentPath = $attachmentDir . '/' . $attachment->getName();
+                            $uploadedFile = new UploadedFile($attachmentPath, $attachment->getName(), $attachment->getMimeType());
+                            $this->telegramService->bot()->sendDocument([
+                                'chat_id' => $chatId,
+                                'document' => $uploadedFile
+                            ]);
+                            unlink($attachmentPath);
+                        }
 
                         $oMessage->setFlag('SEEN');
                         $oClient->expunge();
