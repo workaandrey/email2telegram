@@ -60,9 +60,8 @@ RUN cd /var/www && composer install
 # Copy existing application directory permissions
 COPY --chown=www:www . /var/www
 
+COPY docker/entrypoint.sh /
 COPY docker/supervisord.conf /etc/supervisord.conf
-
-CMD ["/usr/bin/supervisord -n -c /etc/supervisord.conf"]
 
 # Change current user to www
 USER www
@@ -70,3 +69,5 @@ USER www
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 CMD ["php-fpm"]
+
+ENTRYPOINT ["bash", "/entrypoint.sh"]
