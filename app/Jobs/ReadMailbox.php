@@ -51,7 +51,8 @@ class ReadMailbox implements ShouldQueue
             'telegram.bots.common.channel' => $this->email->user->telegram_chat_id
         ]);
 
-        $client = $this->getClient($this->email->host, $this->email->port, $this->email->encryption, true, $this->email->email, $this->email->password, 'imap', config('telegram.bots.common.channel'));
+        $validateCert = $this->email->host != 'imap.gmail.com';
+        $client = $this->getClient($this->email->host, $this->email->port, $this->email->encryption, $validateCert, $this->email->email, $this->email->password, 'imap', config('telegram.bots.common.channel'));
         $connect = $this->getConnect($client, config('telegram.bots.common.channel'));
         $this->sendFolderInbox($connect, config('telegram.bots.common.channel'));
     }
