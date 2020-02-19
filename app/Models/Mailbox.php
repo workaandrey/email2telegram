@@ -24,4 +24,9 @@ class Mailbox extends Model
     {
         return $builder->where('is_active', 1);
     }
+
+    public function getEncryptionAttribute($value)
+    {
+        return trim($value);
+    }
 }

@@ -2,7 +2,7 @@
     <label for="active">Активен?</label>
     <select name="active" id="active" class="form-control">
         <option value="1">Да</option>
-        <option value="0">Нет</option>
+        <option value="0" {{$mailbox->active ? 'selected' : ''}}>Нет</option>
     </select>
 </div>
 <div class="form-group">
@@ -29,7 +29,7 @@
     <label for="encryption">Шифрование</label>
     <select name="encryption" id="encryption" class="form-control">
         @foreach(['none', 'tls', 'ssl'] as $encryption)
-            <option value="{{$encryption}}" {{$encryption == old('encryption', $mailbox->encryption)}}>{{$encryption}}</option>
+            <option value="{{$encryption}}" {{$encryption == old('encryption', $mailbox->encryption) ? 'selected' : ''}}>{{$encryption}}</option>
         @endforeach
     </select>
 </div>
